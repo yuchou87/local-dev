@@ -22,4 +22,7 @@ docker compose --profile=web restart caddy
 
 # Access the local development environment using the following URL
 https://local-dev
+
+# Access the consul server using the following URL
+http://local-dev:8500/ui
 ```

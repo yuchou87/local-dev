@@ -72,3 +72,10 @@ services:
     profiles:
       - kv
       - dev
+  consul-server:
+    extends:
+      file: ./services/docker-compose.consul.yaml
+      service: consul-server
+    profiles:
+      - kv
+      - dev

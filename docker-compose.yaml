@@ -64,3 +64,11 @@ services:
     profiles:
       - queue
       - dev
+
+  etcd:
+    extends:
+      file: ./services/docker-compose.etcd.yaml
+      service: etcd
+    profiles:
+      - kv
+      - dev

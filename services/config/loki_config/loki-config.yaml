@@ -9,7 +9,7 @@ schema_config:
     - from: 2023-10-01
       store: tsdb
       object_store: s3
-      schema: v12
+      schema: v13
       index:
         prefix: index_
         period: 24h
@@ -31,3 +31,5 @@ ruler:
   storage:
     s3:
       bucketnames: loki-ruler
+limits_config:
+  allow_structured_metadata: true

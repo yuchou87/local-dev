@@ -1,0 +1,4 @@
+localhost:443, local-dev:443 {
+	reverse_proxy http://grafana:3000
+  tls internal
+}

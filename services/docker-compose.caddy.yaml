@@ -13,7 +13,8 @@ services:
       - ./data/caddy_data/data:/data
       - ./data/caddy_data/config:/config
     healthcheck:
-      test: ['CMD-SHELL', 'wget --no-verbose --tries=1 --spider localhost:2019/config/ || exit 1']
+      test: ['CMD-SHELL', 'wget --no-verbose --tries=1 --spider http://127.0.0.1:2019/config/ || exit 1']
       interval: 30s
       timeout: 5s
       retries: 5
+      start_period: 30s

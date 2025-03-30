@@ -3,6 +3,8 @@ services:
     image: ${REGISTRY_IMAGE_VERSION}
     container_name: registry
     restart: unless-stopped
+    ports:
+      - '5000:5000'
     volumes:
       - ./data/registry_data:/var/lib/registry
     healthcheck:
@@ -10,3 +12,4 @@ services:
       interval: 30s
       timeout: 5s
       retries: 5
+      start_period: 30s

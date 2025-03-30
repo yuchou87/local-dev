@@ -3,6 +3,7 @@ services:
     image: ${GRAFANA_IMAGE_VERSION}
     container_name: grafana
     restart: unless-stopped
+    user: root
     environment:
       - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
       - GF_AUTH_ANONYMOUS_ENABLED=false
@@ -12,10 +13,11 @@ services:
     ports:
       - '3000:3000'
     volumes:
-      - ./data/grafana_data/data:/var/lib/grafana
+      - ./data/grafana_data:/var/lib/grafana
       - ./config/grafana_config/provisioning:/etc/grafana/provisioning
     healthcheck:
       test: ['CMD-SHELL', 'wget --no-verbose --tries=1 --spider http://localhost:3000/api/health || exit 1']
       interval: 30s
       timeout: 5s
       retries: 5
+      start_period: 30s

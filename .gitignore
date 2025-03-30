@@ -1,2 +1,4 @@
 backup
 .env
+data
+services/config/caddy_config/site

@@ -1,0 +1,20 @@
+services:
+  vault:
+    image: ${VAULT_IMAGE_VERSION}
+    container_name: vault
+    restart: unless-stopped
+    command: server -dev -dev-listen-address=0.0.0.0:8200
+    ports:
+      - '8200:8200'
+    environment:
+      - VAULT_DEV_ROOT_TOKEN_ID=local-dev
+    volumes:
+      - ./data/vault_data:/vault/file
+    cap_add:
+      - IPC_LOCK
+    healthcheck:
+      test: ['CMD', 'wget', '--no-verbose', '--spider', '--tries=1', 'http://127.0.0.1:8200/v1/sys/health']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s

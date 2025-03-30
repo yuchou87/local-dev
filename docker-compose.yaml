@@ -79,3 +79,11 @@ services:
     profiles:
       - kv
       - dev
+
+  vault:
+    extends:
+      file: ./services/docker-compose.vault.yaml
+      service: vault
+    profiles:
+      - secrets
+      - dev

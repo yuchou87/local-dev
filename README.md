@@ -25,4 +25,7 @@ https://local-dev
 
 # Access the consul server using the following URL
 http://local-dev:8500/ui
+
+# Access the vault server using the following URL
+http://local-dev:8200/ui
 ```

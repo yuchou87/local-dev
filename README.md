@@ -12,4 +12,14 @@ cd local-dev
 docker compose --profile "*" up -d
 # Run the docker compose command with base profile
 docker compose --profile=base up -d
+
+# ssl certs
+docker compose --profile=web exec caddy caddy trust
+# format caddyfile
+docker compose --profile=web exec -w /etc/caddy caddy caddy fmt --overwrite
+# reload caddy
+docker compose --profile=web restart caddy
+
+# Access the local development environment using the following URL
+https://local-dev
 ```

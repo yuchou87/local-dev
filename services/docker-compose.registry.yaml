@@ -1,0 +1,12 @@
+services:
+  registry:
+    image: ${REGISTRY_IMAGE_VERSION}
+    container_name: registry
+    restart: unless-stopped
+    volumes:
+      - ./data/registry_data:/var/lib/registry
+    healthcheck:
+      test: ['CMD-SHELL', 'wget --no-verbose --tries=1 --spider localhost:5000/v2/ || exit 1']
+      interval: 30s
+      timeout: 5s
+      retries: 5

@@ -1,0 +1,8 @@
+services:
+  redis:
+    image: ${REDIS_IMAGE_VERSION}
+    container_name: redis
+    command: sh -c "redis-server --appendonly yes --aof-use-rdb-preamble yes"
+    restart: unless-stopped
+    volumes:
+      - ./data/redis_data:/data

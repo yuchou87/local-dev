@@ -1,0 +1,11 @@
+services:
+  promtail:
+    image: ${PROMTAIL_IMAGE_VERSION}
+    container_name: promtail
+    restart: unless-stopped
+    volumes:
+      - ./config/promtail_config/promtail-config.yaml:/etc/promtail/config.yaml:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: -config.file=/etc/promtail/config.yaml
+    depends_on:
+      - loki

@@ -1,0 +1,66 @@
+services:
+  caddy:
+    extends:
+      file: ./services/docker-compose.caddy.yaml
+      service: caddy
+    profiles:
+      - web
+
+  registry:
+    extends:
+      file: ./services/docker-compose.registry.yaml
+      service: registry
+    profiles:
+      - base
+
+  loki:
+    extends:
+      file: ./services/docker-compose.loki.yaml
+      service: loki
+    profiles:
+      - monitor
+
+  promtail:
+    extends:
+      file: ./services/docker-compose.promtail.yaml
+      service: promtail
+    profiles:
+      - monitor
+
+  minio:
+    extends:
+      file: ./services/docker-compose.minio.yaml
+      service: minio
+    profiles:
+      - files
+
+  grafana:
+    extends:
+      file: ./services/docker-compose.grafana.yaml
+      service: grafana
+    profiles:
+      - monitor
+
+  redis:
+    extends:
+      file: ./services/docker-compose.redis.yaml
+      service: redis
+    profiles:
+      - cache
+      - dev
+
+  postgres:
+    extends:
+      file: ./services/docker-compose.postgres.yaml
+      service: postgres
+    profiles:
+      - db
+      - dev
+
+  rabbitmq:
+    extends:
+      file: ./services/docker-compose.rabbitmq.yaml
+      service: rabbitmq
+    profiles:
+      - queue
+      - dev

@@ -16,7 +16,8 @@ services:
       - MINIO_PROMETHEUS_AUTH_TYPE=public
       - MINIO_UPDATE=off
     ports:
-      - 9000
+      - '9000:9000'
+      - '34603:34603'
     volumes:
       - ./data/minio_data:/data
     healthcheck:

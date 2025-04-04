@@ -20,12 +20,15 @@ docker compose --profile=web exec -w /etc/caddy caddy caddy fmt --overwrite
 # reload caddy
 docker compose --profile=web restart caddy
 
+# Save the root CA certificate to a file, and double click the certificate file to install it
+docker compose --profile='*' exec caddy cat /data/caddy/pki/authorities/local/root.crt
+
 # Access the local development environment using the following URL
-https://local-dev
+https://local-dev.com
 
 # Access the consul server using the following URL
-http://local-dev:8500/ui
+http://local-dev.com:8500/ui
 
 # Access the vault server using the following URL
-http://local-dev:8200/ui
+http://local-dev.com:8200/ui
 ```

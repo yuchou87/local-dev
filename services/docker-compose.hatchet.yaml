@@ -1,0 +1,71 @@
+services:
+  hatchet-migration:
+    image: ${HATCHET_MIGRATION_IMAGE_VERSION}
+    container_name: hatchet-migration
+    command: /hatchet/hatchet-migrate
+    environment:
+      DATABASE_URL: 'postgres://hatchet:${HATCHET_PASSWORD}@postgres:5432/hatchet'
+    depends_on:
+      postgres:
+        condition: service_healthy
+  hatchet-setup-config:
+    image: ${HATCHET_SETUP_CONFIG_IMAGE_VERSION}
+    container_name: hatchet-setup-config
+    command: /hatchet/hatchet-admin quickstart --skip certs --generated-config-dir /hatchet/config --overwrite=false
+    environment:
+      DATABASE_URL: 'postgres://hatchet:${HATCHET_PASSWORD}@postgres:5432/hatchet'
+      SERVER_TASKQUEUE_RABBITMQ_URL: 'amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@rabbitmq:5672/'
+      SERVER_AUTH_COOKIE_DOMAIN: localhost:8080
+      SERVER_AUTH_COOKIE_INSECURE: 't'
+      SERVER_AUTH_SET_EMAIL_VERIFIED: 't'
+      SERVER_GRPC_BIND_ADDRESS: '0.0.0.0'
+      SERVER_GRPC_INSECURE: 't'
+      SERVER_GRPC_BROADCAST_ADDRESS: localhost:7077
+      SERVER_DEFAULT_ENGINE_VERSION: 'V1'
+      SERVER_INTERNAL_CLIENT_INTERNAL_GRPC_BROADCAST_ADDRESS: hatchet-engine:7077
+    volumes:
+      - ./data/hatchet_data/certs:/hatchet/certs
+      - ./data/hatchet_data/config:/hatchet/config
+    depends_on:
+      hatchet-migration:
+        condition: service_completed_successfully
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+  hatchet-engine:
+    image: ${HATCHET_ENGINE_IMAGE_VERSION}
+    container_name: hatchet-engine
+    command: /hatchet/hatchet-engine --config /hatchet/config
+    restart: on-failure
+    depends_on:
+      hatchet-setup-config:
+        condition: service_completed_successfully
+      hatchet-migration:
+        condition: service_completed_successfully
+    ports:
+      - '7077:7070'
+    environment:
+      DATABASE_URL: 'postgres://hatchet:hatchet@postgres:5432/hatchet'
+      SERVER_GRPC_BIND_ADDRESS: '0.0.0.0'
+      SERVER_GRPC_INSECURE: 't'
+    volumes:
+      - ./data/hatchet_data/certs:/hatchet/certs
+      - ./data/hatchet_data/config:/hatchet/config
+  hatchet-dashboard:
+    image: ${HATCHET_DASHBOARD_IMAGE_VERSION}
+    container_name: hatchet-dashboard
+    command: sh ./entrypoint.sh --config /hatchet/config
+    ports:
+      - 8080:80
+    restart: on-failure
+    depends_on:
+      hatchet-setup-config:
+        condition: service_completed_successfully
+      hatchet-migration:
+        condition: service_completed_successfully
+    environment:
+      DATABASE_URL: 'postgres://hatchet:${HATCHET_PASSWORD}@postgres:5432/hatchet'
+    volumes:
+      - ./data/hatchet_data/certs:/hatchet/certs
+      - ./data/hatchet_data/config:/hatchet/config

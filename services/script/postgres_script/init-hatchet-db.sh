@@ -1,0 +1,16 @@
+#!/bin/bash
+set -e
+
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+	CREATE USER hatchet WITH PASSWORD '${HATCHET_PASSWORD}';
+	CREATE DATABASE hatchet;
+	GRANT ALL PRIVILEGES ON DATABASE hatchet TO hatchet;
+EOSQL
+
+# 连接到 hatchet 数据库并设置权限
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "hatchet" <<-EOSQL
+    GRANT ALL ON SCHEMA public TO hatchet;
+    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO hatchet;
+    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO hatchet;
+    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON FUNCTIONS TO hatchet;
+EOSQL

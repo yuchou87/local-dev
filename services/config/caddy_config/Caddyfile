@@ -1,4 +1,9 @@
-localhost:443, local-dev:443 {
+localhost, local-dev.com {
 	reverse_proxy http://grafana:3000
   tls internal
+}
+
+grpc.local-dev.com {
+  reverse_proxy h2c://127.0.0.1:7070
+	tls internal
 }

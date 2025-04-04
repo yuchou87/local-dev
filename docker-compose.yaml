@@ -87,3 +87,35 @@ services:
     profiles:
       - secrets
       - dev
+
+  hatchet-migration:
+    extends:
+      file: ./services/docker-compose.hatchet.yaml
+      service: hatchet-migration
+    profiles:
+      - dev
+      - workflow
+
+  hatchet-setup-config:
+    extends:
+      file: ./services/docker-compose.hatchet.yaml
+      service: hatchet-setup-config
+    profiles:
+      - dev
+      - workflow
+
+  hatchet-engine:
+    extends:
+      file: ./services/docker-compose.hatchet.yaml
+      service: hatchet-engine
+    profiles:
+      - dev
+      - workflow
+
+  hatchet-dashboard:
+    extends:
+      file: ./services/docker-compose.hatchet.yaml
+      service: hatchet-dashboard
+    profiles:
+      - dev
+      - workflow
